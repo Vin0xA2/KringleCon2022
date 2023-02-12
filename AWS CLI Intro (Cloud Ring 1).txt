@@ -1,0 +1,18 @@
+AWS CLI Intro (Cloud Ring 1)
+Objective: run through some AWS commands
+Reference: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html#cli-configure-quickstart-config
+
+1) AWS CLI help
+  ~$ aws help
+
+2a) Configure the default aws cli credentials with using...
+  Access key: AKQAAYRKO7A5Q5XUY2IY
+  Secret key: qzTscgNdcdwIo/soPKPoJn9sBrl5eMQQL19iO5uf
+  Region: us-east-1
+  Format: text (personally prefer text)
+
+2b) Just need to follow the on-screen prompts after the command below.
+  ~$ aws configure
+
+3) Get caller identity. Resource: https://awscli.amazonaws.com/v2/documentation/api/latest/reference/sts/index.html
+  ~$ aws sts get-caller-identity

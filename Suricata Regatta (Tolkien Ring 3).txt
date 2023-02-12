@@ -1,0 +1,19 @@
+Suricata Regatta (Tolkien Ring 3)
+File: suricateRulesInitial.txt
+Reference: suricata.readthedocs.io/en/suricata-6.0.9/
+Method: reference resource page and rules already in the file for syntax.
+Objective: Add rules for below.
+1) DNS query to adv.epostoday.uk and return msg "Known bad DNS lookup, possible Dridex infection"
+  Answer: alert dns $HOME_NET any -> any any (msg:"Known bad DNS lookup, possible Dridex infection"; dns.query; content:"adv.epostoday.uk"; nocase; sid:001; rev:1;)
+
+2) HTTP from 192.185.57.242 and return msg "Investigate suspicious connections, possible Dridex infection"
+  Needs two rules because of bi-directional communication.
+  Asnwers:
+  alert http 192.185.57.242 any -> $HOME_NET any (msg:"Investigate suspicious connections, possible Dridex infection"; sid:002; rev:1;)
+  alert http any any -> 192.185.57.242 any (msg:"Investigate suspicious connections, possible Dridex infection"; sid:003; rev:1;)
+
+3) Match on SSL cert from heardbellith.Icanwepeh.nagoya and return msg "Investigate bad certificates, possible Dridex infection"
+  Answer: alert tls any any -> any any (msg:"Investigate bad certificates, possible Dridex infection"; tls.cert_issuer; content:"heardbellith.Icanwepeh.nagoya"; sid:004; rev:1;)
+
+4) Watch for JavaScript: let byteCharacters = atob (might be GZip compressed) and return msg "Suspicious JavaScript function, possible Dridex infection"
+  Answer: alert http any any -> any any (msg:"Suspicious JavaScript function, possible Dridex infection"; file_data; content:"let byteCharacters = atob"; sid:005; rev:1;)

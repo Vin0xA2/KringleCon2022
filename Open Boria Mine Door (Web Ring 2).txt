@@ -1,0 +1,65 @@
+Open Boria Mine Door (Web Ring 2)
+Objective: Enter "text" to connect two sides of a rectangle with the right colors.
+Method: Text boxes take HTML tags.
+
+Top Left) Fill the box all white.
+<p style="background-color:White;"><br><br><br><br></p>
+
+Top Middle) Fill the box all white.
+<p style="background-color:White;"><br><br><br><br></p>
+
+Top Right) Doesn't seem to take "background-color" so start using SVG tags. Copy and paste from a text file to avoid the Enter key submitting your entry when trying to type a carriage return or new line.
+<svg viewBox="0 0 100 100">
+  <rect
+    x="0" y="0"
+    width="100%" height="100%"
+    fill="blue"
+  />
+</svg>
+
+Bottom Left) Same as previos, just more boxes of different colors.
+<svg viewBox="0 0 100 100">
+  <rect
+    x="0" y="0"
+    width="100%" height="100%"
+    fill="lime"
+  />
+  <rect
+    x="0" y="30%"
+    width="100%" height="100%"
+    fill="red"
+  />
+  <rect
+    x="0" y="50%"
+    width="80%" height="100%"
+    fill="blue"
+  />
+</svg>
+
+Bottom Middle) Clicking out of the text box removes the < and > characters. Use the Enter key to submit the "text" instead.
+<svg viewBox="0 0 100 100">
+  <rect
+    x="0" y="0"
+    width="100%" height="100%"
+    fill="red"
+  />
+  <rect
+    x="10%" y="40%"
+    width="100%" height="100%"
+    fill="blue"
+  />
+</svg>
+
+Bottom Right) Same as previous, just more boxes of different colors.
+<svg viewBox="0 0 100 100">
+  <rect
+    x="0" y="0"
+    width="100%" height="100%"
+    fill="white"
+  />
+  <rect
+    x="0" y="50%"
+    width="100%" height="100%"
+    fill="blue"
+  />
+</svg>

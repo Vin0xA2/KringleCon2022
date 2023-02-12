@@ -1,0 +1,46 @@
+Windows Event Logs (Tolkien Ring 2)
+File: powershell.evtx
+Objective: Powershell log in flat text file.
+Method: grep grep grep
+1) MM/DD/YYYY attack took place?
+  ~$ grep -e [0-9]*\/[0-9]*\/[0-9]* powershell.evtx.log | head
+  Answer: 12/24/2022
+
+2) Original file name with stolen secret?
+  ~$ grep Add\-Content powershell.evtx.log | grep Path
+  Asnwer: Recipe.txt
+
+3) Contents of file were retrieved, changed, and stored in a variable. Last PS line that only did those?
+  Command from question 2 points to renaming of file, so grep for the new file name. That leads to the string: "-replace".
+  ~$ grep recipe_updated.txt powershell.evtx.log | grep Path
+  ~$ grep \-replace powershell.evtx.log
+  Answer: $foo
+
+4) After save to variable, command to write to file. Last PS line that only did that?
+  ~$ grep \$foo powershell.evtx.log
+  First line = latest because Windows logs like to be in reverse chronological order.
+  Answer: $foo | Add-Content -Path 'Recipe'
+
+5) Ran previous command against file multi-times. File name?
+  Result of the line right under previous command.
+  Answer: Recipe.txt
+
+6) Any files deleted [Y/N]?
+  Remove-Item cmdlet shows up in grep.
+  Asnwer: Yes
+
+7) File from question 2 deleted [Y/N]?
+  Remove-Item cmdlet was not used on that file.
+  Answer: No
+
+8) Event ID with cmd line that deleted the file?
+  Event ID = type of event. 4104 = Creating Scriptblock text. That displays what's typed in.
+  Answer: 4104
+
+9) Secret ingredient compromised [Y/N]?
+  Above result shows honey replaced by fish oil.
+  Answer: Yes
+
+10) Secret ingredient?
+  See question 9.
+  Answer: honey

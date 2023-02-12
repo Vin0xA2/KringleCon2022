@@ -1,0 +1,15 @@
+Clone with a Difference (Elfen Ring 1)
+Objective:
+1) git clone git@haugfactory.com:asnowball/aws_scripts.git
+2) Please clone the repo and cat the README.md file.
+3) Then runtoanswer and tell us the last word of the README.md file!
+
+Method:
+1) Access the HTTP version of the repo via web browser (https://haugfactory.com/asnowball)
+2) Repo page shows user 'asnowball' was moved to 'orcadmin'.
+3) Update address and clone via HTTP instead of SSH (since we don't have the SSH key).
+  ~$ git clone http://haugfactory.com/orcadmin/aws_scripts.git
+  ~$ cd aws_scripts/
+  ~$ cat README.md
+  ~$ runtoanswer
+4) Your answer: maintainers

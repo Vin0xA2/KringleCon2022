@@ -1,0 +1,21 @@
+Boria PCAP Mining (Web Ring 1)
+File: boriaArtifacts.zip (from Alabaster Snowball)
+File: Unzip the zip file to get log and PCAP files.
+
+1) Naughty IP Address?
+  There's a bunch of 1 counts queries different subdomains. This means someone is either guessing or bruteforcing subdomains. File the associated IP address doing that.
+  ~$ cut -d ] -f 2 weberror.log | sort | uniq -c | sort
+  Asnwer: 18.222.86.32
+
+2) First username tried in bruteforce?
+  Wireshark filter: ip.dst==18.222.86.32 || ip.src==18.222.86.32
+  Packet 7279, first POST request to login.html, HTML Form URL Encoded has the username and password sent/attempted.
+  Answer: alice
+
+3) First URL success in subdir guessing bruteforce?
+  Packet 30080, first 200 OK after a bunch of 404 NOT FOUND. Packet 30077, looking back to find the associated GET request for the subdomain.
+  Answer: /proc
+
+4) URL attacker force the server to fetch?
+  Attacker used XXE to get secret keys from the IMDS service. HTTP/XML protocol packets started to appear further down in the PCAP. One of them has a reply with SecretAccessKey. Packet 32918 has the URL and 32932 has the reply.
+  Answer: http://169.254.169.254/latest/meta-data/identity-credentials/ec2/security-credentials/ec2-instance

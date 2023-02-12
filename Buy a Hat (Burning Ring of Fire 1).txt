@@ -1,0 +1,8 @@
+Buy a Hat (Burning Ring of Fire 1)
+Objective: buy a hat.
+1) Find vending machine.
+2) Select a hat.
+3) Pop-up will give address and amount to send to.
+4) Send the KC at a KTM. (Approve transactions with your wallet address, the amount, and your wallet key)
+5) Receive Hat ID, redeem at vending machine, put on hat.
+6) Remember the transaction Block number.

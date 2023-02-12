@@ -1,0 +1,13 @@
+Trufflehog Search (Cloud Ring 2)
+Objective: get name of the file that has AWS credentials?
+Method: run trufflehog to find secrets committed to https://haugfactory.com/orcadmin/aws_scripts
+
+1) Search for secrets in the Git repo and output into output.txt (I had a hard time with the terminal not scrolling so outputting and viewing through a file instead)
+  ~$ trufflehog git https://haugfactory.com/orcadmin/aws_scripts.git > output.txt
+  ~$ nano output.txt
+
+2) Look at an older commit to confirm SSH keys were committed (output to output.txt because scrolling issues)
+  ~$ git checkout 106d33e1ffd53eea753c1365eafc6588398279b5 > output.txt
+  ~$ nano output.txt
+
+3) Answer: put_policy.py

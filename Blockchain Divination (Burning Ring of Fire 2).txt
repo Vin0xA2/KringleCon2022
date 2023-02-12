@@ -1,0 +1,8 @@
+Blockchain Divination (Burning Ring of Fire 2)
+Objective: find the address for the smart contract
+Reference: https://en.wikipedia.org/wiki/Smart_contract#Workings
+
+Transactions are being sent to the address of the smart contract to be validated.
+1) View your transaction Block number (from when you bought your hat).
+2) Destination address that the "transaction" got sent to is the smart contract address.
+Answer: 0xc27A2D3DE339Ce353c0eFBa32e948a88F1C86554
