@@ -19,6 +19,8 @@
 [Open Boria Mine Door](Open%20Boria%20Mine%20Door%20(Web%20Ring%202).txt)
 
 [Glamtariels Fountain](Glamtariels%20Fountain%20(Web%20Ring%203).txt)
+ | [With Burp](Glamtariels%20Fountain%20with%20Burp%20Suite.txt)
+ | [Editing JS](Glamtariels%20Fountain%20Editing%20JS.txt)
 
 ## Recover the Cloud Ring
 [AWS CLI Intro](AWS%20CLI%20Intro%20(Cloud%20Ring%201).txt)
