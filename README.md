@@ -1,4 +1,7 @@
 # 2022 SANS Holiday Hack Challenge &amp; KringleCon
+Try them out yourself at: https://www.sans.org/mlp/holiday-hack-challenge-2022/
+
+2022 is the first year I attempt the SANS Holiday Hack Challenge (KringleCon). Below are my notes and solutions. It was fun putting what I learned from my participation in the National Cyber League. My favorite challenge is the Glamtariels Fountain. I got to practice using multiple tools to do the same exploit expanding my tool kit.
 ## Recover the Tolkien Ring
 [Wireshark Practice](Notes/Wireshark%20Practice%20(Tolkien%20Ring%201).txt)
 
